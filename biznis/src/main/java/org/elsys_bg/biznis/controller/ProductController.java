@@ -1,30 +1,56 @@
 package org.elsys_bg.biznis.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.elsys_bg.biznis.service.impl.ProductServiceImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.elsys_bg.biznis.entity.Product;
+import org.elsys_bg.biznis.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/products")
-@RequiredArgsConstructor
-public class ProductController{
-    private final ProductServiceImpl productService;
+@RequestMapping("/products")
+public class ProductController {
+    private final ProductService productService;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<String> getAllProducts(){
-        String htmlContent = "";
+    @Autowired
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-        try{
-            htmlContent = productService.findAll().toString();
-        }catch(Exception e){
-            System.out.println(e);
-            return new ResponseEntity<>("Error 500: Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
+
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        Optional<Product> product = productService.getProductById(id);
+        if (product.isPresent()) {
+            return product.get();
+        } else {
+            throw new IllegalArgumentException("Product not found with ID: " + id);
         }
+    }
 
-        return new ResponseEntity<>(htmlContent, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+        Optional<Product> product = productService.getProductById(id);
+        if (product.isPresent()) {
+            updatedProduct.setId(id);
+            return productService.updateProduct(updatedProduct);
+        } else {
+            throw new IllegalArgumentException("Product not found with ID: " + id);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
     }
 }

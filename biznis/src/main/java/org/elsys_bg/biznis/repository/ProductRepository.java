@@ -7,11 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{
-    @Query("SELECT p FROM Product p WHERE p.product = :product")
-    Product findByProduct(String product);
 
-    default boolean productExists(String productName){
-        Product product = findByProduct(productName);
-        return product != null;
-    }
 }

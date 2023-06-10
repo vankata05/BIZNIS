@@ -14,6 +14,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByItemNameContainingIgnoreCase(String itemName);
 
     List<Order> findByItemNameAndIdGreaterThan(String itemName, Long id);
-
-    // additional methods if needed
 }

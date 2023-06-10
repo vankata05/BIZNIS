@@ -2,6 +2,8 @@ package org.elsys_bg.biznis.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -26,5 +28,11 @@ public class Order {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public void setCustomerId(Long customerId) {
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
     }
 }

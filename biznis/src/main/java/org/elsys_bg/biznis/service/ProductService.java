@@ -3,13 +3,16 @@ package org.elsys_bg.biznis.service;
 import org.elsys_bg.biznis.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ProductService{
-    List<Product> findAll();
+public interface ProductService {
+    Product createProduct(Product product);
 
-    Product save(Product product);
+    List<Product> getAllProducts();
 
-    void delete(Product product);
+    Optional<Product> getProductById(Long id);
 
-    Product updateProduct(Product admin);
+    Product updateProduct(Product updatedProduct);
+
+    void deleteProduct(Long id);
 }
